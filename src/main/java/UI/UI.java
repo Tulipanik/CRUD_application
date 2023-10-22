@@ -90,7 +90,7 @@ public class UI {
 
                 System.out.println("Podaj treść notatki:");
                 String note = readFromUser();
-                databaseHandler.addNote(new Note(title, note));
+                databaseHandler.addNote(new Note(title, note, "1"));
 
             case "2":
 
