@@ -1,17 +1,16 @@
 package UI;
 
+import com.example.backend.repositories.NoteRepositoryH2;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import repositories.impl.NoteRepositoryImpl;
-import model.Note;
-
 public class UI {
 
-    final private static NoteRepositoryImpl databaseHandler = new NoteRepositoryImpl();
+    private static NoteRepositoryH2 databaseHandler = null;
 
     public void Start () {
         System.out.println("Witamy w aplikacji Notatki!");
@@ -90,7 +89,7 @@ public class UI {
 
                 System.out.println("Podaj treść notatki:");
                 String note = readFromUser();
-                databaseHandler.addNote(new Note(title, note, "1"));
+//                databaseHandler.addNote(new Note(title, note, "1"));
 
             case "2":
 
