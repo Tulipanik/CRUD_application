@@ -23,13 +23,6 @@ public class Note extends Auditable {
     private String content;
     private String userId;
 
-
-    public Note(String title, String content, String userId) {
-        this.title = title;
-        this.content = content;
-        this.userId = userId;
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (obj == null || this.getId() == null) {

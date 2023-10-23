@@ -6,8 +6,8 @@ import org.mapstruct.Mapper;
 
 @Mapper
 public interface NoteDtoMapper {
-      NoteDto toDto(Note note);
+    NoteDto toDto(Note note);
 
-      Note toEntity(NoteDto dto);
+    Note toEntity(NoteDto dto);
 
 }

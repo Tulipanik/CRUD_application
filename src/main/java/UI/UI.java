@@ -10,9 +10,10 @@ import java.util.List;
 
 public class UI {
 
+    //TODO: probably should be instance of Note Repository
     private static NoteRepositoryH2 databaseHandler = null;
 
-    public void Start () {
+    public void Start() {
         System.out.println("Witamy w aplikacji Notatki!");
         startMenu();
 
@@ -20,7 +21,7 @@ public class UI {
         choosingStartStage(mode);
     }
 
-    private void startMenu () {
+    private void startMenu() {
         System.out.println("Wybierz operację którą chcesz wykonać:");
         System.out.println("1- Wyświetlanie");
         System.out.println("2- Tworzenie");
@@ -28,7 +29,7 @@ public class UI {
         System.out.println("4- Usuwanie");
     }
 
-    private void choosingStartStage (String mode) {
+    private void choosingStartStage(String mode) {
         String newMode = "";
 
         switch (mode) {
@@ -69,7 +70,7 @@ public class UI {
         }
     }
 
-    private void choosingReadStage (String mode) {
+    private void choosingReadStage(String mode) {
 
         switch (mode) {
             case "1":
@@ -80,7 +81,7 @@ public class UI {
         }
     }
 
-    private void choosingCreateStage (String mode) {
+    private void choosingCreateStage(String mode) {
 
         switch (mode) {
             case "1":
@@ -89,6 +90,7 @@ public class UI {
 
                 System.out.println("Podaj treść notatki:");
                 String note = readFromUser();
+//                TODO: add note to database
 //                databaseHandler.addNote(new Note(title, note, "1"));
 
             case "2":
@@ -97,7 +99,7 @@ public class UI {
         }
     }
 
-    private void choosingModifyStage (String mode) {
+    private void choosingModifyStage(String mode) {
 
         switch (mode) {
             case "1":
@@ -110,7 +112,7 @@ public class UI {
         }
     }
 
-    private void choosingDeleteStage (String mode) {
+    private void choosingDeleteStage(String mode) {
 
         switch (mode) {
             case "1":
@@ -121,7 +123,7 @@ public class UI {
                 System.out.println("Ile notatek chcesz usunąć?");
                 Integer num = Integer.valueOf(readFromUser());
                 List<String> titles = new ArrayList<>();
-                for (int i = 0; i < num; i++){
+                for (int i = 0; i < num; i++) {
                     System.out.println("Podaj tytuł " + num + " notatki do usunięcia: ");
                     String next_title = readFromUser();
                     titles.add(next_title);
@@ -131,7 +133,7 @@ public class UI {
         }
     }
 
-    private String readFromUser () {
+    private String readFromUser() {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         try {
             return reader.readLine();
