@@ -33,6 +33,7 @@ public class NotesController {
     @ResponseStatus(HttpStatus.OK)
     @JsonView(Views.Get.class)
     Collection<NoteDto> findAll() {
+        log.info("Finding all notes");
         log.info("Found all notes: {}", noteService.findAll());
         return noteService.findAll();
     }
@@ -50,6 +51,7 @@ public class NotesController {
     @JsonView(Views.Get.class)
     NoteDto findById(@PathVariable @NotNull String id) {
         log.info("Finding note by id {}", id);
+        log.info("Found note: {}", noteService.findById(id));
         return noteService.findById(id);
     }
 
@@ -62,6 +64,8 @@ public class NotesController {
     @ResponseStatus(HttpStatus.OK)
     @JsonView(Views.Get.class)
     Collection<NoteDto> findAllByUserId(@PathVariable @NotNull String userId) {
+        log.info("Finding all notes by user id {}", userId);
+        log.info("Found all notes by user id: {}", noteService.findAllByUserId(userId));
         return noteService.findAllByUserId(userId);
     }
 
@@ -74,8 +78,9 @@ public class NotesController {
     @ResponseStatus(HttpStatus.CREATED)
     @JsonView(Views.Post.class)
     void add(@RequestBody @JsonView(value = Views.Post.class) @NotNull NoteDto note) {
-        log.debug("Create note: {}", note);
-        noteService.add(note);
+        log.info("Adding note: {}", note);
+        var id = noteService.add(note);
+        log.info("Added note: {}", noteService.findById(id));
     }
 
     @Operation(
@@ -90,7 +95,9 @@ public class NotesController {
     })
     @JsonView(Views.Put.class)
     void update(@PathVariable @NotNull String id, @RequestBody @NotNull NoteDto noteDto) {
+        log.info("Updating note with id {}: {}", id, noteDto);
         noteService.update(id, noteDto);
+        log.info("Updated note with id {}: {}", id, noteService.findById(id));
     }
 
     @Operation(
@@ -105,7 +112,9 @@ public class NotesController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void delete(@PathVariable @NotNull String id) {
+        log.info("Deleting note with id {}", id);
         noteService.delete(id);
+        log.info("Deleted note with id {}", id);
     }
 
     @Operation(
@@ -116,7 +125,9 @@ public class NotesController {
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void deleteAll() {
+        log.info("Deleting all notes");
         noteService.deleteAll();
+        log.info("Deleted all notes");
     }
 
     @Operation(
@@ -127,6 +138,8 @@ public class NotesController {
     @DeleteMapping("/user/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void deleteAllByUserId(@PathVariable @NotNull String userId) {
+        log.info("Deleting all notes by user id {}", userId);
         noteService.deleteAllByUserId(userId);
+        log.info("Deleted all notes by user id {}", userId);
     }
 }
