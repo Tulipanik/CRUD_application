@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class NotesAppBackend {
 
     public static void main(String[] args) {
+
         SpringApplication.run(NotesAppBackend.class, args);
     }
 
