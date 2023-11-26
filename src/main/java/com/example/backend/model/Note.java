@@ -1,10 +1,9 @@
 package com.example.backend.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UuidGenerator;
 
 @Entity
@@ -17,7 +16,8 @@ import org.hibernate.annotations.UuidGenerator;
 @AllArgsConstructor
 public class Note extends Auditable {
     @Id
-    @UuidGenerator
+    @GeneratedValue(generator = "custom-id", strategy = GenerationType.SEQUENCE)
+    @GenericGenerator(name = "custom-id", strategy = "com.example.backend.model.IdGenerator")
     private String id;
     private String title;
     private String content;

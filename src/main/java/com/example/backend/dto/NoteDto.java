@@ -10,7 +10,7 @@ import lombok.extern.jackson.Jacksonized;
 @Builder
 @Jacksonized
 public class NoteDto {
-    @Schema(description = "Note primary key", example = "ded634e9-3e4a-459c-9bee-eaff8c2c38d3")
+    @Schema(description = "Note primary key", example = "0")
     @JsonView({Views.Get.class, Views.Put.class})
     String id;
 
