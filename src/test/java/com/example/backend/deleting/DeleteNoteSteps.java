@@ -4,6 +4,8 @@ import com.example.backend.model.Note;
 import io.restassured.RestAssured;
 import lombok.extern.slf4j.Slf4j;
 import io.restassured.response.Response;
+
+import org.jbehave.core.annotations.AfterScenario;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
@@ -16,6 +18,7 @@ import java.util.List;
 public class DeleteNoteSteps extends Steps {
     private String apiUrl;
     private Response response;
+    private List<Note> notes;
 
     @Given("I have api endpoint \"$apiUrl\" and in the database I have $notesCount notes")
     public void givenIHaveApiEndpointAndNotes(String apiUrl, int notesCount) {
@@ -35,28 +38,47 @@ public class DeleteNoteSteps extends Steps {
                             """)
                     .post(apiUrl);
         }
+
+        notes = RestAssured.given()
+                .contentType("application/json")
+                .get(apiUrl)
+                .jsonPath()
+                .getList(".", Note.class);
     }
 
     @Given("I DELETE $deleteNoteId note")
     public void deleteNoteWithGivenId(String deleteNoteId) {
-        log.info("Deleting note: {}", deleteNoteId);
+        var deleteNoteActualId = GetNoteId(deleteNoteId);
+        log.info("Deleting note: {}", deleteNoteActualId);
         RestAssured.given()
                 .contentType("application/json")
-                .delete(apiUrl + "/" + deleteNoteId);
+                .delete(apiUrl + "/" + deleteNoteActualId);
     }
 
     @When("I send DELETE request for $noteId note")
     public void whenISendDeleteRequestForNoteId(String noteId) {
-        apiUrl = apiUrl + "/" + noteId;
-        log.info("Note id: {}", noteId);
+        var noteActualId = GetNoteId(noteId);
+        log.info("Note id: {}", noteActualId);
         this.response = RestAssured.given()
                 .contentType("application/json")
-                .delete(apiUrl);
-        log.info("Response: {}", response.asString());
+                .delete(apiUrl + "/" + noteActualId);
+        log.info("Response: {}", this.response.asString());
     }
 
     @Then("response status code should be $statusCode")
     public void thenResponseStatusShouldBe(int statusCode) {
         response.then().statusCode(statusCode);
+    }
+
+    @AfterScenario
+    public void clearDatabase() throws Exception {
+        this.response = RestAssured.given()
+                .contentType("application/json")
+                .delete(apiUrl);
+    }
+
+    private String GetNoteId(String index) {
+        var parsedId = Integer.parseInt(index);
+        return parsedId < 0 || parsedId > notes.size() ? index : notes.get(parsedId).getId();
     }
 }

@@ -32,6 +32,6 @@ public class DeleteGroupNoteLiveTest extends JUnitStories {
 
   @Override
   public List<String> storyPaths() {
-    return List.of("stories/DeleteGroupNote.story");
+    return List.of("stories/DeleteNoteGroup.story");
   }
 }
