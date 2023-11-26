@@ -17,3 +17,10 @@ Given I have api endpoint and three notes in database "http://localhost:8080/not
 When I send GET request without arguments
 Then response status code should be 200
 And it should return Json with three notes
+
+Scenario: Retrieve all notes, database has three notes with different group id's
+Given I have api endpoint and three notes with different groups
+in database "http://localhost:8080/notes"
+When I send GET request without arguments
+Then response status code should be 200
+And it should return Json with three notes with different groups

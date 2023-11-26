@@ -42,6 +42,34 @@ public class GetAllNotesSteps extends Steps {
         this.apiUrl = apiUrl;
     }
 
+    @Given("I have api endpoint and three notes with different groups\n" +
+            "in database \"$apiUrl\"")
+    public void givenIHaveApiEndpointThreeElementsDifferentGroups(String apiUrl) {
+        String requestBody1 = "{\n" +
+                "  \"title\": \"My first note\",\n" +
+                "  \"content\": \"This is my first note\",\n" +
+                "  \"userId\": \"Students\"\n" +
+                "}";
+        String requestBody2 = "{\n" +
+                "  \"title\": \"My first note\",\n" +
+                "  \"content\": \"This is my first note\",\n" +
+                "  \"userId\": \"Professors\"\n" +
+                "}";
+        RestAssured.given().delete(apiUrl);
+        for (int i = 0; i < 2; i++) {
+            RestAssured.given()
+                    .contentType("application/json")
+                    .body(requestBody1)
+                    .post(apiUrl);
+        }
+        RestAssured.given()
+                .contentType("application/json")
+                .body(requestBody2)
+                .post(apiUrl);
+        log.info("API URL: {}", apiUrl);
+        this.apiUrl = apiUrl;
+    }
+
     @When("I send GET request without arguments")
     public void whenISendGetRequestWithoutArguments() {
         this.response = RestAssured.given()
@@ -82,6 +110,34 @@ public class GetAllNotesSteps extends Steps {
                 + "\"title\":\"My first note\","
                 + "\"content\":\"This is my first note\","
                 + "\"userId\":\"1\"\\}\\]";
+
+        // Get the response body as a string
+        String responseBody = response.getBody().asString();
+
+        // Use regex pattern to match the response body
+        if (!responseBody.matches(regexPattern)) {
+            throw new AssertionError("Response body does not match the expected pattern");
+        }
+    }
+
+    @Then("it should return Json with three notes with different groups")
+    public void thenItReturnJsonWithThreeNotesDifferentGroups() {
+        // Define a regex pattern to match the expected JSON structure
+        String regexPattern = "\\[\\{"
+                + "\"id\":\"[a-zA-Z0-9-]+\","
+                + "\"title\":\"My first note\","
+                + "\"content\":\"This is my first note\","
+                + "\"userId\":\"Students\"\\},"
+                + "\\{"
+                + "\"id\":\"[a-zA-Z0-9-]+\","
+                + "\"title\":\"My first note\","
+                + "\"content\":\"This is my first note\","
+                + "\"userId\":\"Students\"\\},"
+                + "\\{"
+                + "\"id\":\"[a-zA-Z0-9-]+\","
+                + "\"title\":\"My first note\","
+                + "\"content\":\"This is my first note\","
+                + "\"userId\":\"Professors\"\\}\\]";
 
         // Get the response body as a string
         String responseBody = response.getBody().asString();
