@@ -11,10 +11,10 @@ import org.jbehave.core.annotations.When;
 import org.jbehave.core.steps.Steps;
 
 @Slf4j
+@SuppressWarnings("unused")
 public class AddNoteSteps extends Steps {
 
   private String apiUrl;
-  private String requestBody;
   private Response response;
 
   @Given("I have api endpoint \"$apiUrl\"")
@@ -25,7 +25,6 @@ public class AddNoteSteps extends Steps {
 
   @When("I send POST request with body:$requestBody")
   public void whenISendPostRequestWithBody(String requestBody) {
-    this.requestBody = requestBody;
     log.info("Request: {}", requestBody);
     this.response = RestAssured.given()
         .contentType("application/json")
@@ -39,15 +38,10 @@ public class AddNoteSteps extends Steps {
     response.then().statusCode(statusCode);
   }
 
-  @Then("it should return Json:$expectedJson")
-  public void thenItReturnJson(String expectedJson) {
-    // there should be a better way to do this
-    // but I had trouble with escaping quotes
-    // and new line characters
-    response.then()
-        .body(containsString("\"title\":\"My first note\""))
-        .body(containsString("\"content\":\"This is my first note\""))
-        .body(containsString("\"userId\":\"1\""));
-
+  @Then("it should return a note with title $title and content $content for user with id $userId")
+  public void verifyNote(String title, String content, String userId) {
+    response.then().body(containsString(title));
+    response.then().body(containsString(content));
+    response.then().body(containsString(userId));
   }
 }
