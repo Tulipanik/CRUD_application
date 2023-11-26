@@ -7,7 +7,7 @@ So that outdated notes would not take up space in the database
 
 Scenario: Delete one note
 Given I have api endpoint "http://localhost:8080/notes" and in the database I have 3 notes
-When I send DELETE request for 2 note
+When I send DELETE request for 1 note
 Then response status code should be 204
 
 Scenario: Delete one note which is not present in the database

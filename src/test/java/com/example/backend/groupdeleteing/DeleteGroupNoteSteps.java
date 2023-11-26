@@ -4,6 +4,8 @@ import com.example.backend.model.Note;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
+
+import org.jbehave.core.annotations.AfterScenario;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
@@ -58,5 +60,12 @@ public class DeleteGroupNoteSteps extends Steps {
     public void thenResponseStatusShouldBeAndNotesRemainingShouldBe(int statusCode, int notesRemaining) {
         response.then().statusCode(statusCode);
         // TODO check count
+    }
+
+    @AfterScenario
+    public void clearDatabase() throws Exception {
+        this.response = RestAssured.given()
+                .contentType("application/json")
+                .delete(apiUrl);
     }
 }
