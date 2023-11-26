@@ -81,7 +81,7 @@ public class NotesController {
         log.info("Adding note: {}", note);
         var id = noteService.add(note);
         var addedNote = noteService.findById(id);
-        log.info("Added note: {}", addedNote);
+        log.info("Added note: with id {} {}", id, addedNote);
         return addedNote;
     }
 

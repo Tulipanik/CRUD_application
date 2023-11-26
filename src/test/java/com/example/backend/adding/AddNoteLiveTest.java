@@ -12,7 +12,7 @@ import org.jbehave.core.reporters.StoryReporterBuilder;
 import org.jbehave.core.steps.InjectableStepsFactory;
 import org.jbehave.core.steps.InstanceStepsFactory;
 
-public class AddingNewNoteLiveTest extends JUnitStories {
+public class AddNoteLiveTest extends JUnitStories {
 
   @Override
   public Configuration configuration() {
@@ -25,11 +25,11 @@ public class AddingNewNoteLiveTest extends JUnitStories {
 
   @Override
   public InjectableStepsFactory stepsFactory() {
-    return new InstanceStepsFactory(configuration(), new AddingNewNoteSteps());
+    return new InstanceStepsFactory(configuration(), new AddNoteSteps());
   }
 
   @Override
   public List<String> storyPaths() {
-    return List.of("stories/DodawanieNotatek.story");
+    return List.of("stories/AddNote.story");
   }
 }
