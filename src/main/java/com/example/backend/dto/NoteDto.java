@@ -11,7 +11,7 @@ import lombok.extern.jackson.Jacksonized;
 @Jacksonized
 public class NoteDto {
     @Schema(description = "Note primary key", example = "0")
-    @JsonView({Views.Get.class, Views.Put.class})
+    @JsonView({Views.Get.class})
     String id;
 
     @Schema(description = "Note title", example = "My note")

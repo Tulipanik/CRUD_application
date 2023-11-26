@@ -112,14 +112,15 @@ public class NotesController {
   )
   @PutMapping("/{id}")
   @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Updated the note", content = @Content(schema = @Schema())),
+      @ApiResponse(responseCode = "200", description = "Updated the note", content = @Content(schema = @Schema(implementation = NoteDto.class), mediaType = "application/json")),
       @ApiResponse(responseCode = "404", description = "Note not found", content = @Content(schema = @Schema()))
   })
-  @JsonView(Views.Put.class)
-  public void update(@PathVariable @NotNull String id, @RequestBody @NotNull NoteDto noteDto) {
+  @JsonView(Views.Get.class)
+  public NoteDto update(@PathVariable @NotNull String id, @RequestBody @NotNull @JsonView({Views.Put.class}) NoteDto noteDto) {
     log.info("Updating note with id {}: {}", id, noteDto);
-    noteService.update(id, noteDto);
-    log.info("Updated note with id {}: {}", id, noteService.findById(id));
+    var note = noteService.update(id, noteDto);
+    log.info("Updated note with id {}: {}", id, note);
+    return note;
   }
 
   @Operation(
