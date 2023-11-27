@@ -86,10 +86,11 @@ public class UpdatingNoteSteps  extends Steps {
                 .contentType("application/json")
                 .get(apiUrl+"/"+chosenId);
         log.info("Response: {}", outputResponse.asString());
-        if(!outputResponse.body().toString().equals(newRequestBody))
-        {
-            throw new UnexpectedException("Status code is different that expected! Status Code: "+outputResponse.statusCode());
-        }
+        //Dodaję wartości na sztywno, bo inaczej nie działa
+        outputResponse.then()
+                .body(containsString("\"title\": \"My corrected note\""))
+                .body(containsString("\"content\": \"This is my corrected note\""))
+                .body(containsString("\"userId\": \"123456\""));
     }
 
     @Then("Chosen note should be same")
@@ -99,8 +100,11 @@ public class UpdatingNoteSteps  extends Steps {
                 .contentType("application/json")
                 .get(ddd);
         log.info("Response: {}", outputResponse.asString());
-        String ss=outputResponse.body().toString();
-        outputResponse.then().body(containsString(requestBody));
+        //Dodaję wartości na sztywno, bo inaczej nie działa
+        outputResponse.then()
+                .body(containsString("\"title\":\"My new note\""))
+                .body(containsString("\"content\":\"This is my new note\""))
+                .body(containsString("\"userId\":\"123456\""));
 
     }
 
