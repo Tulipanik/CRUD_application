@@ -1,0 +1,106 @@
+Subject: [PATCH] Changed note id to sequence string instead of uuid
+---
+Index: src/main/java/com/example/backend/dto/NoteDto.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/example/backend/dto/NoteDto.java b/src/main/java/com/example/backend/dto/NoteDto.java
+--- a/src/main/java/com/example/backend/dto/NoteDto.java	(revision 6c432008ef53682d04d237bc0b9923712915bbc7)
++++ b/src/main/java/com/example/backend/dto/NoteDto.java	(revision c9624e92a976cceb80008b03d0a69fa2533a4475)
+@@ -10,7 +10,7 @@
+ @Builder
+ @Jacksonized
+ public class NoteDto {
+-    @Schema(description = "Note primary key", example = "ded634e9-3e4a-459c-9bee-eaff8c2c38d3")
++    @Schema(description = "Note primary key", example = "0")
+     @JsonView({Views.Get.class, Views.Put.class})
+     String id;
+ 
+Index: src/main/java/com/example/backend/model/IdGenerator.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/example/backend/model/IdGenerator.java b/src/main/java/com/example/backend/model/IdGenerator.java
+new file mode 100644
+--- /dev/null	(revision c9624e92a976cceb80008b03d0a69fa2533a4475)
++++ b/src/main/java/com/example/backend/model/IdGenerator.java	(revision c9624e92a976cceb80008b03d0a69fa2533a4475)
+@@ -0,0 +1,15 @@
++package com.example.backend.model;
++
++import org.hibernate.HibernateException;
++import org.hibernate.engine.spi.SharedSessionContractImplementor;
++import org.hibernate.id.IdentifierGenerator;
++
++import java.io.Serializable;
++
++public class IdGenerator implements IdentifierGenerator {
++    static long currentId = -1;
++    @Override
++    public Serializable generate(SharedSessionContractImplementor session, Object object) throws HibernateException {
++        return String.valueOf(++currentId);
++    }
++}
+Index: src/main/java/com/example/backend/model/Note.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/example/backend/model/Note.java b/src/main/java/com/example/backend/model/Note.java
+--- a/src/main/java/com/example/backend/model/Note.java	(revision 6c432008ef53682d04d237bc0b9923712915bbc7)
++++ b/src/main/java/com/example/backend/model/Note.java	(revision c9624e92a976cceb80008b03d0a69fa2533a4475)
+@@ -1,10 +1,9 @@
+ package com.example.backend.model;
+ 
+-import jakarta.persistence.Entity;
+-import jakarta.persistence.Id;
+-import jakarta.persistence.Table;
++import jakarta.persistence.*;
+ import lombok.*;
+ import lombok.experimental.SuperBuilder;
++import org.hibernate.annotations.GenericGenerator;
+ import org.hibernate.annotations.UuidGenerator;
+ 
+ @Entity
+@@ -17,7 +16,8 @@
+ @AllArgsConstructor
+ public class Note extends Auditable {
+     @Id
+-    @UuidGenerator
++    @GeneratedValue(generator = "custom-id", strategy = GenerationType.SEQUENCE)
++    @GenericGenerator(name = "custom-id", strategy = "com.example.backend.model.IdGenerator")
+     private String id;
+     private String title;
+     private String content;
+Index: src/main/resources/stories/DeleteNote.story
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/resources/stories/DeleteNote.story b/src/main/resources/stories/DeleteNote.story
+new file mode 100644
+--- /dev/null	(revision c9624e92a976cceb80008b03d0a69fa2533a4475)
++++ b/src/main/resources/stories/DeleteNote.story	(revision c9624e92a976cceb80008b03d0a69fa2533a4475)
+@@ -0,0 +1,21 @@
++Meta:
++
++Narrative:
++As a user
++I want to delete note
++So that outdated notes would not take up space in the database
++
++Scenario: Delete one note
++Given I have api endpoint "http://localhost:8080/notes" and in the database I have 3 notes
++When I send DELETE request for 2 note
++Then response status code should be 204
++
++Scenario: Delete one note which is not present in the database
++Given I have api endpoint "http://localhost:8080/notes" and in the database I have 3 notes
++When I send DELETE request for 4 note
++Then response status code should be 404
++
++Scenario: Delete the only note that is present in the database
++Given I have api endpoint "http://localhost:8080/notes" and in the database I have 1 notes
++When I send DELETE request for 0 note
++Then response status code should be 204

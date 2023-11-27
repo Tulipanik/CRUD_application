@@ -1,11 +1,18 @@
 package com.example.backend.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.UuidGenerator;
+import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table
@@ -15,35 +22,14 @@ import org.hibernate.annotations.UuidGenerator;
 @ToString(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class Note extends Auditable {
-    @Id
-    @UuidGenerator
-    private String id;
-    private String title;
-    private String content;
-    private String userId;
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null || this.getId() == null) {
-            return false;
-        }
-        if (!(obj instanceof Note)) {
-            return false;
-        }
-        if (obj == this) {
-            return true;
-        }
-        if (((Note) obj).getId() == null) {
-            return false;
-        }
-
-        return this.getId().equals(((Note) obj).getId());
-    }
-
-    @Override
-    public int hashCode() {
-        if (this.getId() == null) return 0;
-        return this.getId().hashCode();
-    }
+  @Id
+  @GeneratedValue(generator = "custom-id", strategy = GenerationType.SEQUENCE)
+  @GenericGenerator(name = "custom-id", strategy = "com.example.backend.model.IdGenerator")
+  private String id;
+  private String title;
+  private String content;
+  private String userId;
 }
