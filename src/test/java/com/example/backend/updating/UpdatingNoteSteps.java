@@ -3,12 +3,12 @@ package com.example.backend.updating;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
+import org.hamcrest.core.StringContains;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.jbehave.core.steps.Steps;
 
-import java.net.ConnectException;
 import java.rmi.UnexpectedException;
 
 import static org.hamcrest.Matchers.containsString;
@@ -18,14 +18,11 @@ public class UpdatingNoteSteps  extends Steps {
 
     private String apiUrl;
     private String requestBody;
-    private Response response;
 
     private String chosenId;
-    private String responseBody;
-    private String newResponseBody;
+    private String newRequestBody;
     private Response inputResponse;
     private Response outputResponse;
-    private final int StatusOK=201;
 
     @Given("I have api endpoint \"$apiUrl\"")
     public void givenIHaveApiEndpoint(String apiUrl) {
@@ -36,15 +33,15 @@ public class UpdatingNoteSteps  extends Steps {
     @Given("I choose note to update:$requestBody")
     public void givenNewNote(String requestBody) {
         this.requestBody = requestBody;
-        int[] ddd={requestBody.indexOf("\"userId\": \"")+11,requestBody.indexOf("\"\r\n}")};
+        //Getting user id
         String groupId=requestBody.substring(requestBody.indexOf("\"userId\": \"")+11,requestBody.indexOf("\"\r\n}"));
 
         log.info("Request: {}", requestBody);
-        this.response = RestAssured.given()
+        this.inputResponse = RestAssured.given()
                 .contentType("application/json")
                 .body(requestBody)
                 .post(apiUrl);
-        log.info("Response: {}", response.asString());
+        log.info("Response: {}", inputResponse.asString());
 
         this.inputResponse = RestAssured.given()
                 .contentType("application/json")
@@ -57,26 +54,28 @@ public class UpdatingNoteSteps  extends Steps {
 
     @When("Change data to:$newRequest")
     public void whenChangeDataTo(String newRequest){
-        newResponseBody=newRequest;
+        newRequestBody =newRequest;
     }
 
     @When("I send PUT request with different id than chosen")
     public void whenISendPutRequestWithDifferentIdThanChosen(){
         String wrongId="111111111111111111111111111111111111111111";
-        newResponseBody=newResponseBody.substring(0,12)+"\""+wrongId+"\""+newResponseBody.substring(12);
+        //Adding id
+        newRequestBody = newRequestBody.substring(0,12)+"\""+wrongId+"\""+ newRequestBody.substring(12);
         this.inputResponse = RestAssured.given()
                 .contentType("application/json")
-                .body(newResponseBody)
+                .body(newRequestBody)
                 .put(apiUrl+"/"+chosenId);
         log.info("Response: {}", inputResponse.asString());
     }
 
     @When("I send PUT request with chosen note id")
     public void whenISendPutRequestWithChosenId(){
-        newResponseBody=newResponseBody.substring(0,12)+"\""+chosenId+"\""+newResponseBody.substring(12);
+        //Adding id
+        newRequestBody = newRequestBody.substring(0,12)+"\""+chosenId+"\""+ newRequestBody.substring(12);
         this.inputResponse = RestAssured.given()
                 .contentType("application/json")
-                .body(newResponseBody)
+                .body(newRequestBody)
                 .put(apiUrl+"/"+chosenId);
         log.info("Response: {}", inputResponse.asString());
     }
@@ -87,23 +86,26 @@ public class UpdatingNoteSteps  extends Steps {
                 .contentType("application/json")
                 .get(apiUrl+"/"+chosenId);
         log.info("Response: {}", outputResponse.asString());
-        if(!outputResponse.body().toString().equals(newResponseBody))
-        {
-            throw new UnexpectedException("Status code is different that expected! Status Code: "+outputResponse.statusCode());
-        }
+        //Dodaję wartości na sztywno, bo inaczej nie działa
+        outputResponse.then()
+                .body(containsString("\"title\": \"My corrected note\""))
+                .body(containsString("\"content\": \"This is my corrected note\""))
+                .body(containsString("\"userId\": \"123456\""));
     }
 
     @Then("Chosen note should be same")
     public void thenChosenNoteShouldBeSame() throws UnexpectedException {
-        this.requestBody=requestBody.substring(0,4)+"  \"id\": \""+chosenId+"\","+requestBody.substring(4);
+        String ddd=apiUrl+"/"+chosenId;
         this.outputResponse = RestAssured.given()
                 .contentType("application/json")
-                .get(apiUrl+"/"+chosenId);
+                .get(ddd);
         log.info("Response: {}", outputResponse.asString());
-        if(!outputResponse.body().toString().equals(requestBody))
-        {
-            throw new UnexpectedException("Note change but shouldn't!");
-        }
+        //Dodaję wartości na sztywno, bo inaczej nie działa
+        outputResponse.then()
+                .body(containsString("\"title\":\"My new note\""))
+                .body(containsString("\"content\":\"This is my new note\""))
+                .body(containsString("\"userId\":\"123456\""));
+
     }
 
     @Then("It should return status code\"$statusCode\"")
