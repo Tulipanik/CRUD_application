@@ -20,8 +20,8 @@ public class DeleteGroupNoteSteps extends Steps {
 
     @Given("I have api endpoint \"$apiUrl\" and in the database I have $notesCount notes assigned to user $userId")
     public void givenIHaveApiEndpointAndNotesWithAssignedUserId(String apiUrl, int notesCount, String userId) {
-        log.info("API URL: {}", apiUrl);
-        log.info("Notes count: {}", notesCount);
+        log.debug("API URL: {}", apiUrl);
+        log.debug("Notes count: {}", notesCount);
         this.apiUrl = apiUrl;
 
         for(int i = 0; i < notesCount; i++) {
@@ -40,7 +40,7 @@ public class DeleteGroupNoteSteps extends Steps {
 
     @Given("I DELETE all notes for user $userId")
     public void deleteAllNotesForGivenUser(String userId) {
-        log.info("Deleting notes for user: {}", userId);
+        log.debug("Deleting notes for user: {}", userId);
         this.response = RestAssured.given()
                 .contentType("application/json")
                 .delete(apiUrl + "/" + userId);
@@ -49,11 +49,11 @@ public class DeleteGroupNoteSteps extends Steps {
     @When("I send DELETE request for user $userId")
     public void whenISendDeleteRequestForGivenUserId(String userId) {
         apiUrl = apiUrl + "/" + userId;
-        log.info("User id: {}", userId);
+        log.debug("User id: {}", userId);
         this.response = RestAssured.given()
                 .contentType("application/json")
                 .delete(apiUrl);
-        log.info("Response: {}", response.asString());
+        log.debug("Response: {}", response.asString());
     }
 
     @Then("response status code should be $statusCode and remaining notes should be $notesRemaining")

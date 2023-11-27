@@ -19,18 +19,18 @@ public class AddNoteSteps extends Steps {
 
   @Given("I have api endpoint \"$apiUrl\"")
   public void givenIHaveApiEndpoint(String apiUrl) {
-    log.info("API URL: {}", apiUrl);
+    log.debug("API URL: {}", apiUrl);
     this.apiUrl = apiUrl;
   }
 
   @When("I send POST request with body:$requestBody")
   public void whenISendPostRequestWithBody(String requestBody) {
-    log.info("Request: {}", requestBody);
+    log.debug("Request: {}", requestBody);
     this.response = RestAssured.given()
         .contentType("application/json")
         .body(requestBody)
         .post(apiUrl);
-    log.info("Response: {}", response.asString());
+    log.debug("Response: {}", response.asString());
   }
 
   @Then("response status code should be $statusCode")

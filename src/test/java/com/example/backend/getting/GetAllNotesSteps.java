@@ -19,7 +19,7 @@ public class GetAllNotesSteps extends Steps {
 
     @Given("I have api endpoint \"$apiUrl\"")
     public void givenIHaveApiEndpoint(String apiUrl) {
-        log.info("API URL: {}", apiUrl);
+        log.debug("API URL: {}", apiUrl);
         this.apiUrl = apiUrl;
         RestAssured.given().delete(apiUrl);
     }
@@ -38,7 +38,7 @@ public class GetAllNotesSteps extends Steps {
                     .body(requestBody)
                     .post(apiUrl);
         }
-        log.info("API URL: {}", apiUrl);
+        log.debug("API URL: {}", apiUrl);
         this.apiUrl = apiUrl;
     }
 
@@ -66,7 +66,7 @@ public class GetAllNotesSteps extends Steps {
                 .contentType("application/json")
                 .body(requestBody2)
                 .post(apiUrl);
-        log.info("API URL: {}", apiUrl);
+        log.debug("API URL: {}", apiUrl);
         this.apiUrl = apiUrl;
     }
 
@@ -75,7 +75,7 @@ public class GetAllNotesSteps extends Steps {
         this.response = RestAssured.given()
                 .contentType("application/json")
                 .get(apiUrl);
-        log.info("Response: {}", response.asString());
+        log.debug("Response: {}", response.asString());
     }
 
     @Then("response status code should be $statusCode")
@@ -151,12 +151,12 @@ public class GetAllNotesSteps extends Steps {
 
 /*
         this.requestBody = requestBody;
-        log.info("Request: {}", requestBody);
+        log.debug("Request: {}", requestBody);
         this.response = RestAssured.given()
                 .contentType("application/json")
                 .body(requestBody)
                 .post(apiUrl);
-        log.info("Response: {}", response.asString());
+        log.debug("Response: {}", response.asString());
 
                 response.then()
                 .body(containsString("\"title\":\"My first note\""))

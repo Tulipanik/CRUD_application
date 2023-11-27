@@ -22,8 +22,8 @@ public class DeleteNoteSteps extends Steps {
 
     @Given("I have api endpoint \"$apiUrl\" and in the database I have $notesCount notes")
     public void givenIHaveApiEndpointAndNotes(String apiUrl, int notesCount) {
-        log.info("API URL: {}", apiUrl);
-        log.info("Notes count: {}", notesCount);
+        log.debug("API URL: {}", apiUrl);
+        log.debug("Notes count: {}", notesCount);
         this.apiUrl = apiUrl;
 
         for(int i = 0; i < notesCount; i++) {
@@ -49,7 +49,7 @@ public class DeleteNoteSteps extends Steps {
     @Given("I DELETE $deleteNoteId note")
     public void deleteNoteWithGivenId(String deleteNoteId) {
         var deleteNoteActualId = GetNoteId(deleteNoteId);
-        log.info("Deleting note: {}", deleteNoteActualId);
+        log.debug("Deleting note: {}", deleteNoteActualId);
         RestAssured.given()
                 .contentType("application/json")
                 .delete(apiUrl + "/" + deleteNoteActualId);
@@ -58,11 +58,11 @@ public class DeleteNoteSteps extends Steps {
     @When("I send DELETE request for $noteId note")
     public void whenISendDeleteRequestForNoteId(String noteId) {
         var noteActualId = GetNoteId(noteId);
-        log.info("Note id: {}", noteActualId);
+        log.debug("Note id: {}", noteActualId);
         this.response = RestAssured.given()
                 .contentType("application/json")
                 .delete(apiUrl + "/" + noteActualId);
-        log.info("Response: {}", this.response.asString());
+        log.debug("Response: {}", this.response.asString());
     }
 
     @Then("response status code should be $statusCode")

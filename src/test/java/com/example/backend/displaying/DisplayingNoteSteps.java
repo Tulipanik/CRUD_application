@@ -24,7 +24,7 @@ public class DisplayingNoteSteps extends Steps {
 
     @Given("I have api endpoint \"$apiUrl\"")
     public void givenIHaveApiEndpoint(String apiUrl) {
-        log.info("API URL: {}", apiUrl);
+        log.debug("API URL: {}", apiUrl);
         this.apiUrl = apiUrl;
     }
 
@@ -34,19 +34,19 @@ public class DisplayingNoteSteps extends Steps {
         this.responseBody ="{ \"title\": \"My first note\"," +
                 "\"content\": \"This is my first note\"," +
                 " \"userId\": \""+userId+"\"}";
-        log.info("Request: {}", responseBody);
+        log.debug("Request: {}", responseBody);
         this.inputResponse = RestAssured.given()
                 .contentType("application/json")
                 .body(responseBody)
                 .post(apiUrl);
-        log.info("Response: {}", inputResponse.asString());
+        log.debug("Response: {}", inputResponse.asString());
         if(inputResponse.statusCode()!=StatusOK){
             throw new ConnectException("Can't connect API! Status Code: "+ inputResponse.statusCode());
         }
         this.inputResponse = RestAssured.given()
                 .contentType("application/json")
                 .get(apiUrl+"/user/"+userId);
-        log.info("Response: {}", inputResponse.asString());
+        log.debug("Response: {}", inputResponse.asString());
         //Getting id of first note
         var body=inputResponse.body().asString();
         chosenId=body.substring(body.indexOf(":\"")+2,body.indexOf("\","));
@@ -63,7 +63,7 @@ public class DisplayingNoteSteps extends Steps {
         this.outputResponse = RestAssured.given()
                 .contentType("application/json")
                 .get(apiUrl+"/"+chosenId);
-        log.info("Response: {}", outputResponse.asString());
+        log.debug("Response: {}", outputResponse.asString());
     }
 
     @Then("It return note with id equal to chosen id")

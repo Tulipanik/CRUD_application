@@ -26,7 +26,7 @@ public class UpdatingNoteSteps  extends Steps {
 
     @Given("I have api endpoint \"$apiUrl\"")
     public void givenIHaveApiEndpoint(String apiUrl) {
-        log.info("API URL: {}", apiUrl);
+        log.debug("API URL: {}", apiUrl);
         this.apiUrl = apiUrl;
     }
 
@@ -36,17 +36,17 @@ public class UpdatingNoteSteps  extends Steps {
         //Getting user id
         String groupId=requestBody.substring(requestBody.indexOf("\"userId\": \"")+11,requestBody.indexOf("\"\r\n}"));
 
-        log.info("Request: {}", requestBody);
+        log.debug("Request: {}", requestBody);
         this.inputResponse = RestAssured.given()
                 .contentType("application/json")
                 .body(requestBody)
                 .post(apiUrl);
-        log.info("Response: {}", inputResponse.asString());
+        log.debug("Response: {}", inputResponse.asString());
 
         this.inputResponse = RestAssured.given()
                 .contentType("application/json")
                 .get(apiUrl+"/user/"+groupId);
-        log.info("Response: {}", inputResponse.asString());
+        log.debug("Response: {}", inputResponse.asString());
         //Getting id of first note
         var body=inputResponse.body().asString();
         chosenId=body.substring(body.indexOf(":\"")+2,body.indexOf("\","));
@@ -66,7 +66,7 @@ public class UpdatingNoteSteps  extends Steps {
                 .contentType("application/json")
                 .body(newRequestBody)
                 .put(apiUrl+"/"+chosenId);
-        log.info("Response: {}", inputResponse.asString());
+        log.debug("Response: {}", inputResponse.asString());
     }
 
     @When("I send PUT request with chosen note id")
@@ -77,7 +77,7 @@ public class UpdatingNoteSteps  extends Steps {
                 .contentType("application/json")
                 .body(newRequestBody)
                 .put(apiUrl+"/"+chosenId);
-        log.info("Response: {}", inputResponse.asString());
+        log.debug("Response: {}", inputResponse.asString());
     }
 
     @Then("Chosen note should contains new data")
@@ -85,7 +85,7 @@ public class UpdatingNoteSteps  extends Steps {
         this.outputResponse = RestAssured.given()
                 .contentType("application/json")
                 .get(apiUrl+"/"+chosenId);
-        log.info("Response: {}", outputResponse.asString());
+        log.debug("Response: {}", outputResponse.asString());
         //Dodaję wartości na sztywno, bo inaczej nie działa
         outputResponse.then()
                 .body(containsString("\"title\": \"My corrected note\""))
@@ -99,7 +99,7 @@ public class UpdatingNoteSteps  extends Steps {
         this.outputResponse = RestAssured.given()
                 .contentType("application/json")
                 .get(ddd);
-        log.info("Response: {}", outputResponse.asString());
+        log.debug("Response: {}", outputResponse.asString());
         //Dodaję wartości na sztywno, bo inaczej nie działa
         outputResponse.then()
                 .body(containsString("\"title\":\"My new note\""))
