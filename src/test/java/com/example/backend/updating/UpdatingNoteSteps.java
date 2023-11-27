@@ -77,7 +77,7 @@ public class UpdatingNoteSteps  extends Steps {
                 .contentType("application/json")
                 .body(newRequestBody)
                 .put(apiUrl+"/"+chosenId);
-        log.info("Response: {}", inputResponse.asString());
+        log.info("Response: {}", inputResponse);
     }
 
     @Then("Chosen note should contains new data")
@@ -88,9 +88,9 @@ public class UpdatingNoteSteps  extends Steps {
         log.info("Response: {}", outputResponse.asString());
         //Dodaję wartości na sztywno, bo inaczej nie działa
         outputResponse.then()
-                .body(containsString("\"title\": \"My corrected note\""))
-                .body(containsString("\"content\": \"This is my corrected note\""))
-                .body(containsString("\"userId\": \"123456\""));
+                .body(containsString("\"title\":\"My corrected note\""))
+                .body(containsString("\"content\":\"This is my corrected note\""))
+                .body(containsString("\"userId\":\"123456\""));
     }
 
     @Then("Chosen note should be same")
@@ -99,21 +99,21 @@ public class UpdatingNoteSteps  extends Steps {
         this.outputResponse = RestAssured.given()
                 .contentType("application/json")
                 .get(ddd);
-        log.info("Response: {}", outputResponse.asString());
+        log.info("Response: {}", outputResponse);
         //Dodaję wartości na sztywno, bo inaczej nie działa
         outputResponse.then()
                 .body(containsString("\"title\":\"My new note\""))
                 .body(containsString("\"content\":\"This is my new note\""))
-                .body(containsString("\"userId\":\"123456\""));
+                .body(containsString("\"userId\":\"12345678\""));
 
     }
 
-    @Then("It should return status code\"$statusCode\"")
+    @Then("It should return status code \"$statusCode\"")
     public void thenChosenNoteShouldContainsNewData(int statusCode) throws UnexpectedException {
 
-        if(outputResponse.statusCode()!=statusCode)
+        if(inputResponse.statusCode()!=statusCode)
         {
-            throw new UnexpectedException("Status code is different that expected! Status Code: "+outputResponse.statusCode());
+            throw new UnexpectedException("Status code is different that expected! Status Code: "+inputResponse.statusCode());
         }
     }
 }

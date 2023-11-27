@@ -18,6 +18,25 @@
 		<org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
 	</properties>
 	<dependencies>
+		<dependency>
+			<groupId>net.serenity-bdd</groupId>
+			<artifactId>serenity-core</artifactId>
+			<version>1.9.0</version>
+		</dependency>
+		<dependency>
+			<groupId>net.serenity-bdd</groupId>
+			<artifactId>serenity-junit</artifactId>
+			<version>1.9.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>net.serenity-bdd</groupId>
+			<artifactId>serenity-jbehave</artifactId>
+			<version>1.46.0</version>
+		</dependency>
+
+
+
 		<!--Mapstruct dependency-->
 		<dependency>
 			<groupId>org.mapstruct</groupId>

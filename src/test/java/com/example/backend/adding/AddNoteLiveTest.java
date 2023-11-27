@@ -1,7 +1,7 @@
 package com.example.backend.adding;
 
 import static org.jbehave.core.io.CodeLocations.codeLocationFromClass;
-import static org.jbehave.core.reporters.Format.CONSOLE;
+import static org.jbehave.core.reporters.Format.*;
 
 import java.util.List;
 import org.jbehave.core.configuration.Configuration;
@@ -11,6 +11,7 @@ import org.jbehave.core.junit.JUnitStories;
 import org.jbehave.core.reporters.StoryReporterBuilder;
 import org.jbehave.core.steps.InjectableStepsFactory;
 import org.jbehave.core.steps.InstanceStepsFactory;
+import org.junit.runner.RunWith;
 
 public class AddNoteLiveTest extends JUnitStories {
 
@@ -20,7 +21,7 @@ public class AddNoteLiveTest extends JUnitStories {
         .useStoryLoader(new LoadFromClasspath(this.getClass()))
         .useStoryReporterBuilder(new StoryReporterBuilder()
             .withCodeLocation(codeLocationFromClass(this.getClass()))
-            .withFormats(CONSOLE));
+            .withFormats(CONSOLE,HTML,STATS,XML));
   }
 
   @Override

@@ -21,7 +21,7 @@ When Change data to:
   "content": "This is my corrected note",
   "userId": "123456"
 }
-And  I send PUT request with chosen note id
+And I send PUT request with chosen note id
 Then Chosen note should contains new data
 
 Scenario: Modify note that is not in DB
@@ -30,7 +30,7 @@ And I choose note to update:
 {
   "title": "My new note",
   "content": "This is my new note",
-  "userId": "123456"
+  "userId": "12345678"
 }
 
 When Change data to:
@@ -38,8 +38,8 @@ When Change data to:
   "id": ,
   "title": "My corrected note",
   "content": "This is my corrected note",
-  "userId": "123456"
+  "userId": "12345678"
 }
 And I send PUT request with different id than chosen
 Then Chosen note should be same
-And It should return status code "401"
+And It should return status code "400"
