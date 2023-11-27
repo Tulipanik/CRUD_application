@@ -2,6 +2,8 @@ package com.example.backend.adding;
 
 import static org.jbehave.core.io.CodeLocations.codeLocationFromClass;
 import static org.jbehave.core.reporters.Format.CONSOLE;
+import static org.jbehave.core.reporters.Format.HTML;
+import static org.jbehave.core.reporters.Format.TXT;
 
 import java.util.List;
 import org.jbehave.core.configuration.Configuration;
@@ -20,7 +22,7 @@ public class AddNoteLiveTest extends JUnitStories {
         .useStoryLoader(new LoadFromClasspath(this.getClass()))
         .useStoryReporterBuilder(new StoryReporterBuilder()
             .withCodeLocation(codeLocationFromClass(this.getClass()))
-            .withFormats(CONSOLE));
+            .withFormats(CONSOLE, TXT, HTML));
   }
 
   @Override

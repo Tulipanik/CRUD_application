@@ -13,6 +13,8 @@ import java.util.List;
 
 import static org.jbehave.core.io.CodeLocations.codeLocationFromClass;
 import static org.jbehave.core.reporters.Format.CONSOLE;
+import static org.jbehave.core.reporters.Format.HTML;
+import static org.jbehave.core.reporters.Format.TXT;
 
 public class DeleteGroupNoteLiveTest extends JUnitStories {
 
@@ -22,7 +24,7 @@ public class DeleteGroupNoteLiveTest extends JUnitStories {
         .useStoryLoader(new LoadFromClasspath(this.getClass()))
         .useStoryReporterBuilder(new StoryReporterBuilder()
             .withCodeLocation(codeLocationFromClass(this.getClass()))
-            .withFormats(CONSOLE));
+            .withFormats(CONSOLE, TXT, HTML));
   }
 
   @Override

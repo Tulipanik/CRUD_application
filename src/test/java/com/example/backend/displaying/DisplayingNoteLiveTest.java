@@ -12,25 +12,27 @@ import java.util.List;
 
 import static org.jbehave.core.io.CodeLocations.codeLocationFromClass;
 import static org.jbehave.core.reporters.Format.CONSOLE;
+import static org.jbehave.core.reporters.Format.HTML;
+import static org.jbehave.core.reporters.Format.TXT;
 
 public class DisplayingNoteLiveTest extends JUnitStories {
 
-    @Override
-    public Configuration configuration() {
-        return new MostUsefulConfiguration()
-                .useStoryLoader(new LoadFromClasspath(this.getClass()))
-                .useStoryReporterBuilder(new StoryReporterBuilder()
-                        .withCodeLocation(codeLocationFromClass(this.getClass()))
-                        .withFormats(CONSOLE));
-    }
+  @Override
+  public Configuration configuration() {
+    return new MostUsefulConfiguration()
+        .useStoryLoader(new LoadFromClasspath(this.getClass()))
+        .useStoryReporterBuilder(new StoryReporterBuilder()
+            .withCodeLocation(codeLocationFromClass(this.getClass()))
+            .withFormats(CONSOLE, TXT, HTML));
+  }
 
-    @Override
-    public InjectableStepsFactory stepsFactory() {
-        return new InstanceStepsFactory(configuration(), new DisplayingNoteSteps());
-    }
+  @Override
+  public InjectableStepsFactory stepsFactory() {
+    return new InstanceStepsFactory(configuration(), new DisplayingNoteSteps());
+  }
 
-    @Override
-    public List<String> storyPaths() {
-        return List.of("stories/DisplayingNote.story");
-    }
+  @Override
+  public List<String> storyPaths() {
+    return List.of("stories/DisplayingNote.story");
+  }
 }
