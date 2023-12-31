@@ -81,8 +81,9 @@ public class NoteService {
     if (noteToUpdate.isEmpty()) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, NOTE_NOT_FOUND_MSG.formatted(id));
     }
-    var note = noteRepository.save(noteDtoMapper.toEntity(noteDto));
-    return noteDtoMapper.toDto(note);
+    var note = noteDtoMapper.toEntity(noteDto);
+    note.setId(id);
+    return noteDtoMapper.toDto(noteRepository.save(note));
   }
 
   /**
