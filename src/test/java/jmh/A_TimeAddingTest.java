@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 @Fork(1)
 @Warmup(iterations = 10)
 @Measurement(iterations = 15)
-public class TimeAddingTest {
+public class A_TimeAddingTest {
 
     private HttpURLConnection connection;
     private String titleChange = "";

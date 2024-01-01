@@ -13,17 +13,20 @@ import java.util.concurrent.TimeUnit;
 @Fork(1)
 @Warmup(iterations = 10)
 @Measurement(iterations = 10)
-public class TimeDeletingByUserIdTest {
+public class C_TimeGettingByUserIdTest {
+
     private HttpURLConnection connection;
+    private int userId = 5;
     @Setup
     public void setup () {
+        userId++;
         try {
-            URL url = new URL("http://localhost:8080/notes/user/1");
+            URL url = new URL("http://localhost:8080/notes/user/" + userId);
             connection = (HttpURLConnection) url.openConnection();
             connection.setRequestProperty("Content-Type", "application/json");
             connection.setDoInput(true);
             connection.setDoOutput(true);
-            connection.setRequestMethod("DELETE");
+            connection.setRequestMethod("GET");
 
         } catch (Exception e){
             throw new RuntimeException("Something's went wrong with setup");
@@ -37,3 +40,4 @@ public class TimeDeletingByUserIdTest {
     }
 
 }
+

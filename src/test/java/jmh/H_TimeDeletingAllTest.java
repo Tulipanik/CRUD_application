@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 @Fork(1)
 @Warmup(iterations = 10)
 @Measurement(iterations = 10)
-public class TimeDeletingAllTest {
+public class H_TimeDeletingAllTest {
     private HttpURLConnection connection;
 
     @Setup
@@ -33,6 +33,7 @@ public class TimeDeletingAllTest {
     @Benchmark
     public int test () throws IOException {
         int responseCode = connection.getResponseCode();
+        System.out.println(responseCode);
         return responseCode;
     }
 

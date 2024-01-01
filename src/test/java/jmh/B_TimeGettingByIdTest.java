@@ -3,7 +3,6 @@ package jmh;
 import org.openjdk.jmh.annotations.*;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
@@ -14,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 @Fork(1)
 @Warmup(iterations = 10)
 @Measurement(iterations = 10)
-public class TimeGettingByIdTest {
+public class B_TimeGettingByIdTest {
 
     private HttpURLConnection connection;
     private int id = -1;
