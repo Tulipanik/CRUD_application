@@ -47,7 +47,6 @@ public class E_TimeUpdatingTest {
     @Benchmark
     public int testAddingTime () throws IOException {
         int responseCode = connection.getResponseCode();
-        System.out.println(responseCode);
         return responseCode;
     }
 

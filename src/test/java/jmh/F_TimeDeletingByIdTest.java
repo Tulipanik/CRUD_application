@@ -36,7 +36,6 @@ public class F_TimeDeletingByIdTest {
     @Benchmark
     public int test () throws IOException {
         int responseCode = connection.getResponseCode();
-        System.out.println(responseCode);
         return responseCode;
     }
 }

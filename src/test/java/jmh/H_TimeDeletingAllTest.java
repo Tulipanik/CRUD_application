@@ -33,7 +33,6 @@ public class H_TimeDeletingAllTest {
     @Benchmark
     public int test () throws IOException {
         int responseCode = connection.getResponseCode();
-        System.out.println(responseCode);
         return responseCode;
     }
 
