@@ -19,7 +19,7 @@ public class NoteService {
   private final NoteDtoMapper noteDtoMapper;
   private final NoteRepositoryH2 noteRepository;
   private static final String NOTE_NOT_FOUND_MSG = "Note with id %s does not exist";
-  public static final String ID_AND_NOTE_ID_IS_NOT_EQUAL = "Id (%s) and note.id (%s) is not equal";
+  public static final String NOTE_SHOULD_NOT_HAVE_ID = "Note JSON (%s) should not have id";
 
   /**
    * Find all notes
@@ -73,16 +73,17 @@ public class NoteService {
    * @return the updated note
    */
   public NoteDto update(String id, NoteDto noteDto) {
-    if (!id.equals(noteDto.getId())) {
+    if (noteDto.getId() != null) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-          ID_AND_NOTE_ID_IS_NOT_EQUAL.formatted(id, noteDto.getId()));
+          NOTE_SHOULD_NOT_HAVE_ID.formatted(noteDto.getId()));
     }
     var noteToUpdate = noteRepository.findById(id);
     if (noteToUpdate.isEmpty()) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, NOTE_NOT_FOUND_MSG.formatted(id));
     }
-    var note = noteRepository.save(noteDtoMapper.toEntity(noteDto));
-    return noteDtoMapper.toDto(note);
+    var note = noteDtoMapper.toEntity(noteDto);
+    note.setId(id);
+    return noteDtoMapper.toDto(noteRepository.save(note));
   }
 
   /**
